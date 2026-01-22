@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import './index.css';
 import { SearchForm } from './components/SearchForm/SearchForm';
-import { SearchSummary } from './components/SearchSummary/SearchSummary';
 import { FlightResults } from './components/FlightResults/FlightResults';
 import { FilterPanel } from './components/Filters/FilterPanel';
 import { PriceChart } from './components/PriceGraph/PriceChart';
@@ -76,40 +75,55 @@ function App() {
           />
         )}
 
-        {/* Compact Search Summary - Show when results are loaded */}
-        {flights.length > 0 && !showSearchCard && (
-          <SearchSummary
-            origin={searchParams.origin}
-            destination={searchParams.destination}
-            departureDate={searchParams.departureDate}
-            onEditClick={() => setShowSearchCard(true)}
-          />
-        )}
-
         {/* Results Section */}
         {flights.length > 0 && (
           <div className="sticky top-16 z-30 bg-white py-4 -mx-4 px-4 mb-6 border-b border-gray-200 shadow-sm">
-            <div className="flex gap-3">
-              <button
-                onClick={() => setActiveTab('list')}
-                className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
-                  activeTab === 'list'
-                    ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
-                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
-                }`}
-              >
-                📋 Flight List ({filteredFlights.length})
-              </button>
-              <button
-                onClick={() => setActiveTab('graph')}
-                className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
-                  activeTab === 'graph'
-                    ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
-                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
-                }`}
-              >
-                📊 Price Chart
-              </button>
+            <div className="flex gap-3 items-center justify-between">
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setActiveTab('list')}
+                  className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    activeTab === 'list'
+                      ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
+                      : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
+                  }`}
+                >
+                  📋 Flight List ({filteredFlights.length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('graph')}
+                  className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    activeTab === 'graph'
+                      ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
+                      : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
+                  }`}
+                >
+                  📊 Price Chart
+                </button>
+              </div>
+
+              {/* Search Summary Info - Right side */}
+              {!showSearchCard && (
+                <div className="flex items-center gap-4 ml-auto pl-4 border-l border-gray-300">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-gray-900">{searchParams.origin}</span>
+                      <span className="text-gray-400">→</span>
+                      <span className="text-sm font-semibold text-gray-900">{searchParams.destination}</span>
+                    </div>
+                    <div className="h-4 w-px bg-gray-300"></div>
+                    <span className="text-sm text-gray-600 font-medium">
+                      {new Date(searchParams.departureDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setShowSearchCard(true)}
+                    className="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 hover:border-gray-400 transition-all duration-200 whitespace-nowrap"
+                  >
+                    Edit
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
