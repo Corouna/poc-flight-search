@@ -32,12 +32,12 @@ export const FilterPanel = ({
       <legend className="sr-only">Flight filters</legend>
       
       {/* Fixed Header */}
-      <div className="shrink-0 border-b border-gray-200 bg-white rounded-t-xl p-6">
+      <div className="shrink-0 border-b border-gray-200 bg-white rounded-t-xl p-4">
         <div className="flex items-center justify-between mb-0">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
             {hasActiveFilters && (
-              <p className="text-xs text-gray-600 mt-1.5 font-medium">
+              <p className="text-xs text-gray-600 mt-1 font-medium">
                 {filters.selectedAirlines.length + filters.selectedStops.length + (filters.maxPrice < priceRange.max ? 1 : 0)} active
               </p>
             )}
@@ -59,10 +59,10 @@ export const FilterPanel = ({
       </div>
 
       {/* Scrollable Content - Hidden Scrollbar */}
-      <div className="flex-1 overflow-y-auto px-6 py-5 scrollbar-hide">
-        <div className="space-y-5 divide-y divide-gray-200">
+      <div className="flex-1 overflow-y-auto px-6 py-4 scrollbar-hide">
+        <div className="space-y-3 divide-y divide-gray-200">
           <fieldset className="border-0">
-            <legend className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wider">Price</legend>
+            <legend className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wider">Price</legend>
             <PriceFilter
               minPrice={priceRange.min}
               maxPrice={priceRange.max}
@@ -71,8 +71,8 @@ export const FilterPanel = ({
             />
           </fieldset>
 
-          <fieldset className="pt-5 border-0">
-            <legend className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wider flex items-center gap-2">
+          <fieldset className="pt-3 border-0">
+            <legend className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wider flex items-center gap-2">
               Stops
               {filters.selectedStops.length > 0 && (
                 <span className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-bold">
@@ -86,8 +86,8 @@ export const FilterPanel = ({
             />
           </fieldset>
 
-          <fieldset className="pt-5 border-0">
-            <legend className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wider flex items-center gap-2">
+          <fieldset className="pt-3 border-0">
+            <legend className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wider flex items-center gap-2">
               Airlines
               {filters.selectedAirlines.length > 0 && (
                 <span className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-bold">
