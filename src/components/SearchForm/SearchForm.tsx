@@ -85,7 +85,7 @@ export const SearchForm = ({ onSearch, loading, onUrlStateLoaded }: SearchFormPr
             required
             aria-required="true"
             aria-label="Departure airport code"
-            className="w-full h-12 px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors placeholder:text-gray-400"
+            className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors placeholder:text-gray-400"
           />
           <p className="text-xs text-gray-500 mt-2 font-medium">Airport code</p>
         </div>
@@ -106,7 +106,7 @@ export const SearchForm = ({ onSearch, loading, onUrlStateLoaded }: SearchFormPr
             required
             aria-required="true"
             aria-label="Destination airport code"
-            className="w-full h-12 px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors placeholder:text-gray-400"
+            className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors placeholder:text-gray-400"
           />
           <p className="text-xs text-gray-500 mt-2 font-medium">Airport code</p>
         </div>
@@ -126,13 +126,12 @@ export const SearchForm = ({ onSearch, loading, onUrlStateLoaded }: SearchFormPr
             required
             aria-required="true"
             aria-label="Departure date"
-            className="w-full h-12 px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors"
+            className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors"
           />
         </div>
 
         {/* Search Button */}
-        <div className="flex flex-col justify-end">
-          <label className="block text-sm font-semibold text-gray-700 mb-3 invisible">Search</label>
+        <div className="flex items-end md:items-center md:mt-2">
           <button
             type="submit"
             disabled={loading}
