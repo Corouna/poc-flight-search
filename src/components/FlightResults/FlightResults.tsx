@@ -11,39 +11,45 @@ interface FlightResultsProps {
   selectedDate?: string;
 }
 
-// Professional Skeleton Card Component
+// Professional Skeleton Card Component - matches FlightCard layout exactly
 const SkeletonCard = () => (
-  <div className="bg-white border border-gray-200 rounded-lg p-6 space-y-4">
-    {/* Header: Airline + Route */}
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3 flex-1">
-        <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
-        <div className="space-y-2 flex-1">
-          <div className="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
-          <div className="h-3 bg-gray-100 rounded w-32 animate-pulse"></div>
-        </div>
+  <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+      {/* Airline (col 1) */}
+      <div className="md:col-span-1 space-y-2">
+        <div className="h-4 bg-gray-200 rounded w-16 animate-pulse"></div>
+        <div className="h-3 bg-gray-100 rounded w-24 animate-pulse"></div>
+      </div>
+
+      {/* Departure (col 2) */}
+      <div className="md:col-span-1 space-y-2">
+        <div className="h-6 bg-gray-200 rounded w-20 mx-auto md:mx-0 animate-pulse"></div>
+        <div className="h-3 bg-gray-100 rounded w-12 mx-auto md:mx-0 animate-pulse"></div>
+      </div>
+
+      {/* Duration & Stops (col 3) - centered */}
+      <div className="md:col-span-1 text-center space-y-2">
+        <div className="h-4 bg-gray-200 rounded w-24 mx-auto animate-pulse"></div>
+        <div className="h-0.5 bg-gray-300 my-2"></div>
+        <div className="h-3 bg-gray-100 rounded w-20 mx-auto animate-pulse"></div>
+      </div>
+
+      {/* Arrival (col 4) */}
+      <div className="md:col-span-1 space-y-2">
+        <div className="h-6 bg-gray-200 rounded w-20 mx-auto md:mx-0 animate-pulse"></div>
+        <div className="h-3 bg-gray-100 rounded w-12 mx-auto md:mx-0 animate-pulse"></div>
+      </div>
+
+      {/* Price & Button (col 5) - right aligned */}
+      <div className="md:col-span-1 text-right space-y-2">
+        <div className="h-8 bg-gray-200 rounded w-24 ml-auto animate-pulse"></div>
+        <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
       </div>
     </div>
 
-    {/* Flight Times + Duration */}
-    <div className="grid grid-cols-3 gap-4 py-4 border-y border-gray-100">
-      <div className="text-center space-y-2">
-        <div className="h-5 bg-gray-200 rounded w-12 mx-auto animate-pulse"></div>
-        <div className="h-3 bg-gray-100 rounded w-16 mx-auto animate-pulse"></div>
-      </div>
-      <div className="flex items-center justify-center">
-        <div className="h-3 bg-gray-100 rounded w-20 animate-pulse"></div>
-      </div>
-      <div className="text-center space-y-2">
-        <div className="h-5 bg-gray-200 rounded w-12 mx-auto animate-pulse"></div>
-        <div className="h-3 bg-gray-100 rounded w-16 mx-auto animate-pulse"></div>
-      </div>
-    </div>
-
-    {/* Stops + Price */}
-    <div className="flex items-center justify-between">
-      <div className="h-4 bg-gray-100 rounded w-24 animate-pulse"></div>
-      <div className="h-6 bg-gray-200 rounded w-20 animate-pulse"></div>
+    {/* Details section - matches FlightCard structure */}
+    <div className="mt-4 pt-4 border-t border-gray-200">
+      <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
     </div>
   </div>
 );
@@ -101,37 +107,44 @@ export const FlightResults = ({
   }
 
   return (
-    <section aria-label="Flight search results">
+    <section aria-label="Flight search results" className="flex flex-col">
       {/* Price by Date Scroller */}
       {selectedDate && (
         <PriceByDateScroller flights={flights} selectedDate={selectedDate} />
       )}
 
-      {/* Sort Options */}
-      <div className="mb-8 flex flex-wrap gap-2 items-center">
-        <p className="text-sm font-semibold text-gray-700 w-full">Sort by</p>
-        {(['price', 'duration', 'departure'] as const).map((option) => (
-          <button
-            key={option}
-            onClick={() => onSortChange(option)}
-            className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
-              sortBy === option
-                ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
-                : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
-            }`}
-            aria-pressed={sortBy === option}
-          >
-            {option === 'price' && '💰 Price'}
-            {option === 'duration' && '⏱️ Duration'}
-            {option === 'departure' && '🕒 Departure'}
-          </button>
-        ))}
-      </div>
+      {/* Sticky Control Bar */}
+      <div className="sticky top-18 z-20 bg-white border-b border-gray-200 py-3 -mx-4 px-4 mb-4 shadow-sm">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          {/* Sort Options */}
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Sort by:</p>
+            <div className="flex gap-2">
+              {(['price', 'duration', 'departure'] as const).map((option) => (
+                <button
+                  key={option}
+                  onClick={() => onSortChange(option)}
+                  className={`px-3 py-1.5 rounded-lg font-semibold text-xs transition-all duration-200 ${
+                    sortBy === option
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'bg-gray-100 text-gray-700 hover:border-blue-400 hover:text-blue-600'
+                  }`}
+                  aria-pressed={sortBy === option}
+                >
+                  {option === 'price' && '💰'}
+                  {option === 'duration' && '⏱️'}
+                  {option === 'departure' && '🕒'}
+                </button>
+              ))}
+            </div>
+          </div>
 
-      {/* Results Count */}
-      <p className="text-sm text-gray-600 mb-5 font-medium">
-        Showing {flights.length} flight{flights.length === 1 ? '' : 's'}
-      </p>
+          {/* Results Count */}
+          <p className="text-xs text-gray-600 font-medium whitespace-nowrap">
+            {flights.length} flight{flights.length === 1 ? '' : 's'}
+          </p>
+        </div>
+      </div>
 
       {/* Flight Cards */}
       <div className="space-y-4">

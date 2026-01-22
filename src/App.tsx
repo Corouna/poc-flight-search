@@ -65,8 +65,8 @@ function App() {
 
         {/* Results Section */}
         {flights.length > 0 && (
-          <div className="mb-6">
-            <div className="flex gap-3 mb-4">
+          <div className="sticky top-16 z-30 bg-white py-4 -mx-4 px-4 mb-6 border-b border-gray-200 shadow-sm">
+            <div className="flex gap-3">
               <button
                 onClick={() => setActiveTab('list')}
                 className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
@@ -124,15 +124,6 @@ function App() {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-16">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <p className="text-sm text-gray-600 text-center">
-            Powered by Amadeus Flight Search API | One-way flights only
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
