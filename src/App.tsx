@@ -117,8 +117,13 @@ function App() {
                     </span>
                   </div>
                   <button
-                    onClick={() => setShowSearchCard(true)}
-                    className="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 hover:border-gray-400 transition-all duration-200 whitespace-nowrap"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowSearchCard(true);
+                    }}
+                    className="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 hover:border-gray-400 active:bg-gray-300 transition-all duration-200 whitespace-nowrap cursor-pointer relative z-40"
                   >
                     Edit
                   </button>
