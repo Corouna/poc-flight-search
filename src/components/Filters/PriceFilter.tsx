@@ -11,9 +11,10 @@ export const PriceFilter = ({
   currentMax,
   onChange,
 }: PriceFilterProps) => {
+  const isFiltered = currentMax < maxPrice;
+
   return (
     <div>
-      <h3 className="font-semibold text-gray-900 mb-4">💰 Price Range</h3>
       <div className="space-y-3">
         <input
           type="range"
@@ -27,10 +28,11 @@ export const PriceFilter = ({
               ((currentMax - minPrice) / (maxPrice - minPrice)) * 100
             }%, #d1d5db ${((currentMax - minPrice) / (maxPrice - minPrice)) * 100}%, #d1d5db 100%)`,
           }}
+          aria-label="Maximum price filter"
         />
         <div className="flex justify-between items-center">
           <span className="text-sm text-gray-600">Min: ${minPrice}</span>
-          <span className="text-lg font-bold text-blue-600">
+          <span className={`text-lg font-bold ${isFiltered ? 'text-blue-600 bg-blue-50 px-2 py-1 rounded' : 'text-gray-700'}`}>
             Max: ${currentMax}
           </span>
         </div>

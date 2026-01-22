@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './index.css';
 import { SearchForm } from './components/SearchForm/SearchForm';
 import { FlightResults } from './components/FlightResults/FlightResults';
@@ -6,6 +6,7 @@ import { FilterPanel } from './components/Filters/FilterPanel';
 import { PriceChart } from './components/PriceGraph/PriceChart';
 import { useFlightSearch } from './hooks/useFlightSearch';
 import { useFlightFilters } from './hooks/useFlightFilters';
+import { useUrlState } from './hooks/useUrlState';
 import { getPriceDistribution } from './utils/filterHelpers';
 
 function App() {
@@ -22,9 +23,23 @@ function App() {
     updateSortBy,
     resetFilters,
   } = useFlightFilters(flights);
+  const { saveToUrl } = useUrlState();
 
   const [activeTab, setActiveTab] = useState<'list' | 'graph'>('list');
   const priceDistribution = getPriceDistribution(filteredFlights);
+
+  // Save filter and sort state to URL whenever they change
+  useEffect(() => {
+    if (flights.length > 0) {
+      saveToUrl({
+        origin: '',
+        destination: '',
+        departureDate: '',
+        filters,
+        sortBy,
+      });
+    }
+  }, [filters, sortBy, flights.length, saveToUrl]);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
