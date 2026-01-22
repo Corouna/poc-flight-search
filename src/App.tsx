@@ -56,32 +56,20 @@ function App() {
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <h1 className="text-3xl font-bold text-gray-950 tracking-tight">
             ✈️ Flight Search Engine
           </h1>
           <p className="text-gray-600 text-sm mt-1 font-normal">Find the best flights for your trip</p>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search Form - Show only when no results */}
-        {flights.length === 0 && (
-          <SearchForm 
-            onSearch={handleSearch} 
-            loading={loading}
-            onUrlStateLoaded={(_origin, _destination, departureDate) => setSelectedDate(departureDate)}
-          />
-        )}
-
-        {/* Results Section */}
+        {/* Editor Row - Shows when search is successful */}
         {flights.length > 0 && (
-          <div className="sticky top-16 z-30 bg-white border-b border-gray-200 shadow-sm">
-            {/* Top Row: Tab Buttons */}
-            <div className="py-4 -mx-4 px-4 flex gap-3 items-center">
-              <div className="flex gap-3">
+          <div className="bg-white border-t border-gray-200 shadow-sm">
+            <div className="max-w-7xl mx-auto px-4">
+              {/* Tab Buttons */}
+              <div className="flex gap-3 py-3">
                 <button
                   onClick={() => setActiveTab('list')}
                   className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
@@ -103,55 +91,67 @@ function App() {
                   📊 Price Chart
                 </button>
               </div>
-            </div>
 
-            {/* Bottom Row: Minified Search Form */}
-            <div className="py-3 -mx-4 px-4 bg-gray-50 border-t border-gray-200 flex items-center gap-3">
-              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Modify search:</span>
-              
-              <input
-                type="text"
-                placeholder="From"
-                value={searchOrigin}
-                onChange={(e) => setSearchOrigin(e.target.value.toUpperCase())}
-                maxLength={3}
-                disabled={loading}
-                className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
-              />
+              {/* Minified Search Row */}
+              <div className="flex gap-3 py-3 border-t border-gray-200 bg-gray-50 -mx-4 px-4">
+                <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Modify search:</span>
+                
+                <input
+                  type="text"
+                  placeholder="From"
+                  value={searchOrigin}
+                  onChange={(e) => setSearchOrigin(e.target.value.toUpperCase())}
+                  maxLength={3}
+                  disabled={loading}
+                  className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
+                />
 
-              <input
-                type="text"
-                placeholder="To"
-                value={searchDestination}
-                onChange={(e) => setSearchDestination(e.target.value.toUpperCase())}
-                maxLength={3}
-                disabled={loading}
-                className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
-              />
+                <input
+                  type="text"
+                  placeholder="To"
+                  value={searchDestination}
+                  onChange={(e) => setSearchDestination(e.target.value.toUpperCase())}
+                  maxLength={3}
+                  disabled={loading}
+                  className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
+                />
 
-              <input
-                type="date"
-                value={searchDepartureDate}
-                onChange={(e) => setSearchDepartureDate(e.target.value)}
-                disabled={loading}
-                min={new Date().toISOString().split('T')[0]}
-                className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
-              />
+                <input
+                  type="date"
+                  value={searchDepartureDate}
+                  onChange={(e) => setSearchDepartureDate(e.target.value)}
+                  disabled={loading}
+                  min={new Date().toISOString().split('T')[0]}
+                  className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
+                />
 
-              <button
-                type="button"
-                onClick={async () => {
-                  if (searchOrigin && searchDestination && searchDepartureDate) {
-                    await handleSearch(searchOrigin, searchDestination, searchDepartureDate);
-                  }
-                }}
-                disabled={loading || !searchOrigin || !searchDestination || !searchDepartureDate}
-                className="h-8 px-4 py-1 text-xs font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 whitespace-nowrap shrink-0"
-              >
-                {loading ? 'Searching...' : 'Search'}
-              </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (searchOrigin && searchDestination && searchDepartureDate) {
+                      await handleSearch(searchOrigin, searchDestination, searchDepartureDate);
+                    }
+                  }}
+                  disabled={loading || !searchOrigin || !searchDestination || !searchDepartureDate}
+                  className="h-8 px-4 py-1 text-xs font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 whitespace-nowrap shrink-0"
+                >
+                  {loading ? 'Searching...' : 'Search'}
+                </button>
+              </div>
             </div>
           </div>
+        )}
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Search Form - Show only when no results */}
+        {flights.length === 0 && (
+          <SearchForm 
+            onSearch={handleSearch} 
+            loading={loading}
+            onUrlStateLoaded={(_origin, _destination, departureDate) => setSelectedDate(departureDate)}
+          />
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
