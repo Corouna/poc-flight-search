@@ -114,7 +114,7 @@ export const FlightResults = ({
       )}
 
       {/* Sticky Control Bar */}
-      <div className="sticky top-24 z-20 bg-white border-b border-gray-200 py-3 mb-4 shadow-sm">
+      <div className="sticky top-24 z-20 bg-white border-b border-gray-200 p-2 mb-4 shadow-sm">
         <div className="flex items-center justify-between gap-4 flex-wrap">
           {/* Sort Options */}
           <div className="flex items-center gap-2">
