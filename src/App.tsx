@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './index.css';
 import { SearchForm } from './components/SearchForm/SearchForm';
+import { SearchSummary } from './components/SearchSummary/SearchSummary';
 import { FlightResults } from './components/FlightResults/FlightResults';
 import { FilterPanel } from './components/Filters/FilterPanel';
 import { PriceChart } from './components/PriceGraph/PriceChart';
@@ -27,6 +28,8 @@ function App() {
 
   const [activeTab, setActiveTab] = useState<'list' | 'graph'>('list');
   const [selectedDate, setSelectedDate] = useState('');
+  const [showSearchCard, setShowSearchCard] = useState(true);
+  const [searchParams, setSearchParams] = useState({ origin: '', destination: '', departureDate: '' });
   const priceDistribution = getPriceDistribution(filteredFlights);
 
   // Save filter and sort state to URL whenever they change
@@ -39,8 +42,16 @@ function App() {
         filters,
         sortBy,
       });
+      // Hide search card when results are loaded
+      setShowSearchCard(false);
     }
   }, [filters, sortBy, flights.length, saveToUrl]);
+
+  // Handle search submission
+  const handleSearch = async (origin: string, destination: string, departureDate: string) => {
+    setSearchParams({ origin, destination, departureDate });
+    await search(origin, destination, departureDate);
+  };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
@@ -56,12 +67,24 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search Form */}
-        <SearchForm 
-          onSearch={search} 
-          loading={loading}
-          onUrlStateLoaded={(_origin, _destination, departureDate) => setSelectedDate(departureDate)}
-        />
+        {/* Search Form - Show when no results or when user clicks "Edit search" */}
+        {showSearchCard && (
+          <SearchForm 
+            onSearch={handleSearch} 
+            loading={loading}
+            onUrlStateLoaded={(_origin, _destination, departureDate) => setSelectedDate(departureDate)}
+          />
+        )}
+
+        {/* Compact Search Summary - Show when results are loaded */}
+        {flights.length > 0 && !showSearchCard && (
+          <SearchSummary
+            origin={searchParams.origin}
+            destination={searchParams.destination}
+            departureDate={searchParams.departureDate}
+            onEditClick={() => setShowSearchCard(true)}
+          />
+        )}
 
         {/* Results Section */}
         {flights.length > 0 && (
