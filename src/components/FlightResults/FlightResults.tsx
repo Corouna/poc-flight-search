@@ -100,16 +100,16 @@ export const FlightResults = ({
   return (
     <section aria-label="Flight search results">
       {/* Sort Options */}
-      <div className="mb-6 flex flex-wrap gap-2">
-        <p className="text-sm font-medium text-gray-700 w-full">Sort by:</p>
+      <div className="mb-8 flex flex-wrap gap-2 items-center">
+        <p className="text-sm font-semibold text-gray-700 w-full">Sort by</p>
         {(['price', 'duration', 'departure'] as const).map((option) => (
           <button
             key={option}
             onClick={() => onSortChange(option)}
-            className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+            className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${
               sortBy === option
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
             aria-pressed={sortBy === option}
           >
@@ -121,7 +121,7 @@ export const FlightResults = ({
       </div>
 
       {/* Results Count */}
-      <p className="text-sm text-gray-600 mb-4">
+      <p className="text-sm text-gray-600 mb-5 font-medium">
         Showing {flights.length} flight{flights.length === 1 ? '' : 's'}
       </p>
 

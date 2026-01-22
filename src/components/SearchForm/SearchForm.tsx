@@ -56,26 +56,28 @@ export const SearchForm = ({ onSearch, loading, onUrlStateLoaded }: SearchFormPr
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">Flight Search</h1>
-      <p className="text-sm text-gray-600 mb-6">Find the best flights for your trip</p>
+    <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mb-8">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-gray-950 tracking-tight mb-3">Find flights</h1>
+        <p className="text-base text-gray-600 font-normal">Search for the best flights for your trip</p>
+      </div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded" role="alert">
-          {error}
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg" role="alert">
+          <p className="font-medium text-sm">{error}</p>
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Origin */}
         <div>
-          <label htmlFor="origin" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="origin" className="block text-sm font-semibold text-gray-700 mb-3">
             From <span className="text-red-500">*</span>
           </label>
           <input
             id="origin"
             type="text"
-            placeholder="e.g., JFK"
+            placeholder="JFK"
             value={origin}
             onChange={(e) => setOrigin(e.target.value.toUpperCase())}
             disabled={loading}
@@ -83,20 +85,20 @@ export const SearchForm = ({ onSearch, loading, onUrlStateLoaded }: SearchFormPr
             required
             aria-required="true"
             aria-label="Departure airport code"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+            className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors placeholder:text-gray-400"
           />
-          <p className="text-xs text-gray-500 mt-1">Airport code</p>
+          <p className="text-xs text-gray-500 mt-2 font-medium">Airport code</p>
         </div>
 
         {/* Destination */}
         <div>
-          <label htmlFor="destination" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="destination" className="block text-sm font-semibold text-gray-700 mb-3">
             To <span className="text-red-500">*</span>
           </label>
           <input
             id="destination"
             type="text"
-            placeholder="e.g., LAX"
+            placeholder="LAX"
             value={destination}
             onChange={(e) => setDestination(e.target.value.toUpperCase())}
             disabled={loading}
@@ -104,14 +106,14 @@ export const SearchForm = ({ onSearch, loading, onUrlStateLoaded }: SearchFormPr
             required
             aria-required="true"
             aria-label="Destination airport code"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+            className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors placeholder:text-gray-400"
           />
-          <p className="text-xs text-gray-500 mt-1">Airport code</p>
+          <p className="text-xs text-gray-500 mt-2 font-medium">Airport code</p>
         </div>
 
         {/* Departure Date */}
         <div>
-          <label htmlFor="departure" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="departure" className="block text-sm font-semibold text-gray-700 mb-3">
             Departure <span className="text-red-500">*</span>
           </label>
           <input
@@ -124,7 +126,7 @@ export const SearchForm = ({ onSearch, loading, onUrlStateLoaded }: SearchFormPr
             required
             aria-required="true"
             aria-label="Departure date"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+            className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors"
           />
         </div>
 
@@ -134,15 +136,15 @@ export const SearchForm = ({ onSearch, loading, onUrlStateLoaded }: SearchFormPr
             type="submit"
             disabled={loading}
             aria-busy={loading}
-            className="w-full bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
+            className="w-full h-12 bg-blue-600 text-white font-semibold text-base rounded-lg hover:bg-blue-700 hover:shadow-sm disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
           >
             {loading ? 'Searching...' : 'Search'}
           </button>
         </div>
       </div>
 
-      <p className="text-xs text-gray-500 mt-4">
-        💡 Tip: Use real IATA airport codes (e.g., NYC, LAX, LHR, CDG)
+      <p className="text-xs text-gray-500 mt-6 font-medium">
+        💡 Use IATA codes: JFK, LAX, LHR, CDG, NRT, SFO
       </p>
     </form>
   );

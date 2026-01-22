@@ -28,13 +28,13 @@ export const FilterPanel = ({
     filters.maxPrice < priceRange.max;
 
   return (
-    <fieldset className="bg-white rounded-lg shadow-md p-6 h-fit sticky top-4 border-0">
+    <fieldset className="bg-gray-50 rounded-xl shadow-sm border border-gray-200 p-6 h-fit sticky top-4">
       <legend className="sr-only">Flight filters</legend>
-      <div className="flex items-center justify-between mb-6 pb-4 border-b-2 border-gray-100">
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Filters</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
           {hasActiveFilters && (
-            <p className="text-xs text-blue-600 mt-1">
+            <p className="text-xs text-gray-600 mt-1.5 font-medium">
               {filters.selectedAirlines.length + filters.selectedStops.length + (filters.maxPrice < priceRange.max ? 1 : 0)} active
             </p>
           )}
@@ -42,21 +42,21 @@ export const FilterPanel = ({
         {hasActiveFilters && (
           <button
             onClick={onReset}
-            className="px-3 py-1.5 text-sm bg-red-50 text-red-600 hover:bg-red-100 font-medium rounded border border-red-200 transition-colors"
-            aria-label="Clear all filters"
+            className="px-3 py-1.5 text-xs bg-gray-200 text-gray-700 hover:bg-gray-300 font-semibold rounded-md transition-colors"
+            aria-label="Reset all filters"
           >
-            Clear all
+            Reset
           </button>
         )}
       </div>
 
       {!hasActiveFilters && (
-        <p className="text-xs text-gray-400 mb-4 italic">No filters applied</p>
+        <p className="text-xs text-gray-500 mb-4 font-medium">No filters applied</p>
       )}
 
-      <div className="space-y-6 divide-y divide-gray-200">
+      <div className="space-y-5 divide-y divide-gray-200">
         <fieldset className="border-0">
-          <legend className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Price</legend>
+          <legend className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wider">Price</legend>
           <PriceFilter
             minPrice={priceRange.min}
             maxPrice={priceRange.max}
@@ -65,8 +65,8 @@ export const FilterPanel = ({
           />
         </fieldset>
 
-        <fieldset className="pt-6 border-0">
-          <legend className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
+        <fieldset className="pt-5 border-0">
+          <legend className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wider flex items-center gap-2">
             Stops
             {filters.selectedStops.length > 0 && (
               <span className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-bold">
@@ -80,8 +80,8 @@ export const FilterPanel = ({
           />
         </fieldset>
 
-        <fieldset className="pt-6 border-0">
-          <legend className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
+        <fieldset className="pt-5 border-0">
+          <legend className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wider flex items-center gap-2">
             Airlines
             {filters.selectedAirlines.length > 0 && (
               <span className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-bold">

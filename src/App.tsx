@@ -44,14 +44,12 @@ function App() {
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <h1 className="text-3xl font-bold text-gray-950 tracking-tight">
             ✈️ Flight Search Engine
           </h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Find and filter the best flights for your next trip
-          </p>
+          <p className="text-gray-600 text-sm mt-1 font-normal">Find the best flights for your trip</p>
         </div>
       </header>
 
