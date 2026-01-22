@@ -1,4 +1,5 @@
 import { FlightCard } from './FlightCard';
+import { PriceByDateScroller } from '../PriceByDate/PriceByDateScroller';
 import type { FlightOffer } from '../../types/flight';
 
 interface FlightResultsProps {
@@ -7,6 +8,7 @@ interface FlightResultsProps {
   error: string | null;
   sortBy: 'price' | 'duration' | 'departure';
   onSortChange: (sort: 'price' | 'duration' | 'departure') => void;
+  selectedDate?: string;
 }
 
 // Professional Skeleton Card Component
@@ -52,6 +54,7 @@ export const FlightResults = ({
   error,
   sortBy,
   onSortChange,
+  selectedDate = '',
 }: FlightResultsProps) => {
   if (loading) {
     return (
@@ -99,6 +102,11 @@ export const FlightResults = ({
 
   return (
     <section aria-label="Flight search results">
+      {/* Price by Date Scroller */}
+      {selectedDate && (
+        <PriceByDateScroller flights={flights} selectedDate={selectedDate} />
+      )}
+
       {/* Sort Options */}
       <div className="mb-8 flex flex-wrap gap-2 items-center">
         <p className="text-sm font-semibold text-gray-700 w-full">Sort by</p>
@@ -106,10 +114,10 @@ export const FlightResults = ({
           <button
             key={option}
             onClick={() => onSortChange(option)}
-            className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${
+            className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
               sortBy === option
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
+                : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
             }`}
             aria-pressed={sortBy === option}
           >

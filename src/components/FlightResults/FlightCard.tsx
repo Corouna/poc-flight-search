@@ -55,7 +55,7 @@ export const FlightCard = ({ flight }: FlightCardProps) => {
           <p className="text-3xl font-bold text-blue-600">${price.toFixed(2)}</p>
           <button
             onClick={() => alert('Booking feature coming soon!')}
-            className="mt-2 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm"
+            className="mt-2 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all font-semibold text-sm shadow-sm hover:shadow-md"
           >
             Select
           </button>
@@ -64,8 +64,8 @@ export const FlightCard = ({ flight }: FlightCardProps) => {
 
       {/* Details */}
       <div className="mt-4 pt-4 border-t border-gray-200">
-        <details className="cursor-pointer">
-          <summary className="text-sm font-medium text-gray-700 hover:text-gray-900">
+        <details className="cursor-pointer group">
+          <summary className="text-sm font-semibold text-blue-600 hover:text-blue-700 active:text-blue-800 transition-colors select-none group-open:text-blue-700">
             View details
           </summary>
           <div className="mt-3 space-y-2 text-xs text-gray-600">

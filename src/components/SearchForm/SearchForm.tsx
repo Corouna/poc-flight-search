@@ -136,7 +136,7 @@ export const SearchForm = ({ onSearch, loading, onUrlStateLoaded }: SearchFormPr
             type="submit"
             disabled={loading}
             aria-busy={loading}
-            className="w-full h-12 bg-blue-600 text-white font-semibold text-base rounded-lg hover:bg-blue-700 hover:shadow-sm disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-full h-12 bg-blue-600 text-white font-semibold text-base rounded-lg hover:bg-blue-700 hover:shadow-md active:bg-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
           >
             {loading ? 'Searching...' : 'Search'}
           </button>

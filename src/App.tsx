@@ -26,6 +26,7 @@ function App() {
   const { saveToUrl } = useUrlState();
 
   const [activeTab, setActiveTab] = useState<'list' | 'graph'>('list');
+  const [selectedDate, setSelectedDate] = useState('');
   const priceDistribution = getPriceDistribution(filteredFlights);
 
   // Save filter and sort state to URL whenever they change
@@ -56,28 +57,32 @@ function App() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Search Form */}
-        <SearchForm onSearch={search} loading={loading} />
+        <SearchForm 
+          onSearch={search} 
+          loading={loading}
+          onUrlStateLoaded={(_origin, _destination, departureDate) => setSelectedDate(departureDate)}
+        />
 
         {/* Results Section */}
         {flights.length > 0 && (
           <div className="mb-6">
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-3 mb-4">
               <button
                 onClick={() => setActiveTab('list')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
                   activeTab === 'list'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
+                    ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
+                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
                 }`}
               >
                 📋 Flight List ({filteredFlights.length})
               </button>
               <button
                 onClick={() => setActiveTab('graph')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
                   activeTab === 'graph'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
+                    ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
+                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
                 }`}
               >
                 📊 Price Chart
@@ -111,6 +116,7 @@ function App() {
                 error={error}
                 sortBy={sortBy}
                 onSortChange={updateSortBy}
+                selectedDate={selectedDate}
               />
             ) : (
               <PriceChart data={priceDistribution} />
