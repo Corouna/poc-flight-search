@@ -58,8 +58,8 @@ export const FilterPanel = ({
         )}
       </div>
 
-      {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-5">
+      {/* Scrollable Content - Hidden Scrollbar */}
+      <div className="flex-1 overflow-y-auto px-6 py-5 scrollbar-hide">
         <div className="space-y-5 divide-y divide-gray-200">
           <fieldset className="border-0">
             <legend className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wider">Price</legend>

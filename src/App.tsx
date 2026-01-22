@@ -68,75 +68,93 @@ function App() {
         {flights.length > 0 && (
           <div className="bg-white border-t border-gray-200 shadow-sm">
             <div className="max-w-7xl mx-auto px-4">
-              {/* Tab Buttons */}
-              <div className="flex gap-3 py-3">
-                <button
-                  onClick={() => setActiveTab('list')}
-                  className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
-                    activeTab === 'list'
-                      ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
-                      : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
-                  }`}
-                >
-                  📋 Flight List ({filteredFlights.length})
-                </button>
-                <button
-                  onClick={() => setActiveTab('graph')}
-                  className={`px-5 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
-                    activeTab === 'graph'
-                      ? 'bg-blue-600 text-white shadow-md hover:shadow-lg hover:bg-blue-700'
-                      : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600'
-                  }`}
-                >
-                  📊 Price Chart
-                </button>
-              </div>
+              {/* Minified Search Row with Tab Buttons */}
+              <div className="flex gap-3 py-3 border-t border-gray-200 bg-gray-50 -mx-4 px-4 items-center justify-between">
+                {/* Search Controls - Left side */}
+                <div className="flex gap-3 items-center flex-1">
+                  <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Modify search:</span>
+                  
+                  <input
+                    type="text"
+                    placeholder="From"
+                    value={searchOrigin}
+                    onChange={(e) => setSearchOrigin(e.target.value.toUpperCase())}
+                    maxLength={3}
+                    disabled={loading}
+                    className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
+                  />
 
-              {/* Minified Search Row */}
-              <div className="flex gap-3 py-3 border-t border-gray-200 bg-gray-50 -mx-4 px-4">
-                <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Modify search:</span>
-                
-                <input
-                  type="text"
-                  placeholder="From"
-                  value={searchOrigin}
-                  onChange={(e) => setSearchOrigin(e.target.value.toUpperCase())}
-                  maxLength={3}
-                  disabled={loading}
-                  className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
-                />
+                  <input
+                    type="text"
+                    placeholder="To"
+                    value={searchDestination}
+                    onChange={(e) => setSearchDestination(e.target.value.toUpperCase())}
+                    maxLength={3}
+                    disabled={loading}
+                    className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
+                  />
 
-                <input
-                  type="text"
-                  placeholder="To"
-                  value={searchDestination}
-                  onChange={(e) => setSearchDestination(e.target.value.toUpperCase())}
-                  maxLength={3}
-                  disabled={loading}
-                  className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
-                />
+                  <input
+                    type="date"
+                    value={searchDepartureDate}
+                    onChange={(e) => setSearchDepartureDate(e.target.value)}
+                    disabled={loading}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
+                  />
 
-                <input
-                  type="date"
-                  value={searchDepartureDate}
-                  onChange={(e) => setSearchDepartureDate(e.target.value)}
-                  disabled={loading}
-                  min={new Date().toISOString().split('T')[0]}
-                  className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
-                />
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (searchOrigin && searchDestination && searchDepartureDate) {
+                        await handleSearch(searchOrigin, searchDestination, searchDepartureDate);
+                      }
+                    }}
+                    disabled={loading || !searchOrigin || !searchDestination || !searchDepartureDate}
+                    className="h-8 px-4 py-1 text-xs font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 whitespace-nowrap shrink-0"
+                  >
+                    {loading ? 'Searching...' : 'Search'}
+                  </button>
+                </div>
 
-                <button
-                  type="button"
-                  onClick={async () => {
-                    if (searchOrigin && searchDestination && searchDepartureDate) {
-                      await handleSearch(searchOrigin, searchDestination, searchDepartureDate);
-                    }
-                  }}
-                  disabled={loading || !searchOrigin || !searchDestination || !searchDepartureDate}
-                  className="h-8 px-4 py-1 text-xs font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 whitespace-nowrap shrink-0"
-                >
-                  {loading ? 'Searching...' : 'Search'}
-                </button>
+                {/* Tab Buttons - Right side with icons and tooltips */}
+                <div className="flex gap-2 items-center ml-auto pl-4 border-l border-gray-300">
+                  <div className="group relative">
+                    <button
+                      onClick={() => setActiveTab('list')}
+                      className={`h-8 w-8 rounded-md flex items-center justify-center text-lg transition-all duration-200 ${
+                        activeTab === 'list'
+                          ? 'bg-blue-600 text-white shadow-md'
+                          : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+                      }`}
+                      title="Flight List"
+                    >
+                      📋
+                    </button>
+                    <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-50">
+                      Flight List ({filteredFlights.length})
+                      <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
+
+                  <div className="group relative">
+                    <button
+                      onClick={() => setActiveTab('graph')}
+                      className={`h-8 w-8 rounded-md flex items-center justify-center text-lg transition-all duration-200 ${
+                        activeTab === 'graph'
+                          ? 'bg-blue-600 text-white shadow-md'
+                          : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+                      }`}
+                      title="Price Chart"
+                    >
+                      📊
+                    </button>
+                    <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-50">
+                      Price Chart
+                      <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
