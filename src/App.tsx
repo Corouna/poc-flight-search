@@ -27,8 +27,9 @@ function App() {
 
   const [activeTab, setActiveTab] = useState<'list' | 'graph'>('list');
   const [selectedDate, setSelectedDate] = useState('');
-  const [showSearchCard, setShowSearchCard] = useState(true);
-  const [searchParams, setSearchParams] = useState({ origin: '', destination: '', departureDate: '' });
+  const [searchOrigin, setSearchOrigin] = useState('');
+  const [searchDestination, setSearchDestination] = useState('');
+  const [searchDepartureDate, setSearchDepartureDate] = useState('');
   const priceDistribution = getPriceDistribution(filteredFlights);
 
   // Save filter and sort state to URL whenever they change
@@ -41,14 +42,14 @@ function App() {
         filters,
         sortBy,
       });
-      // Hide search card when results are loaded
-      setShowSearchCard(false);
     }
   }, [filters, sortBy, flights.length, saveToUrl]);
 
   // Handle search submission
   const handleSearch = async (origin: string, destination: string, departureDate: string) => {
-    setSearchParams({ origin, destination, departureDate });
+    setSearchOrigin(origin);
+    setSearchDestination(destination);
+    setSearchDepartureDate(departureDate);
     await search(origin, destination, departureDate);
   };
 
@@ -66,8 +67,8 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search Form - Show when no results or when user clicks "Edit search" */}
-        {showSearchCard && (
+        {/* Search Form - Show only when no results */}
+        {flights.length === 0 && (
           <SearchForm 
             onSearch={handleSearch} 
             loading={loading}
@@ -77,8 +78,9 @@ function App() {
 
         {/* Results Section */}
         {flights.length > 0 && (
-          <div className="sticky top-16 z-30 bg-white py-4 -mx-4 px-4 mb-6 border-b border-gray-200 shadow-sm">
-            <div className="flex gap-3 items-center justify-between">
+          <div className="sticky top-16 z-30 bg-white border-b border-gray-200 shadow-sm">
+            {/* Top Row: Tab Buttons */}
+            <div className="py-4 -mx-4 px-4 flex gap-3 items-center">
               <div className="flex gap-3">
                 <button
                   onClick={() => setActiveTab('list')}
@@ -101,34 +103,53 @@ function App() {
                   📊 Price Chart
                 </button>
               </div>
+            </div>
 
-              {/* Search Summary Info - Right side */}
-              {!showSearchCard && (
-                <div className="flex items-center gap-4 ml-auto pl-4 border-l border-gray-300">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-gray-900">{searchParams.origin}</span>
-                      <span className="text-gray-400">→</span>
-                      <span className="text-sm font-semibold text-gray-900">{searchParams.destination}</span>
-                    </div>
-                    <div className="h-4 w-px bg-gray-300"></div>
-                    <span className="text-sm text-gray-600 font-medium">
-                      {new Date(searchParams.departureDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setShowSearchCard(true);
-                    }}
-                    className="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 hover:border-gray-400 active:bg-gray-300 transition-all duration-200 whitespace-nowrap cursor-pointer relative z-40"
-                  >
-                    Edit
-                  </button>
-                </div>
-              )}
+            {/* Bottom Row: Minified Search Form */}
+            <div className="py-3 -mx-4 px-4 bg-gray-50 border-t border-gray-200 flex items-center gap-3">
+              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Modify search:</span>
+              
+              <input
+                type="text"
+                placeholder="From"
+                value={searchOrigin}
+                onChange={(e) => setSearchOrigin(e.target.value.toUpperCase())}
+                maxLength={3}
+                disabled={loading}
+                className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
+              />
+
+              <input
+                type="text"
+                placeholder="To"
+                value={searchDestination}
+                onChange={(e) => setSearchDestination(e.target.value.toUpperCase())}
+                maxLength={3}
+                disabled={loading}
+                className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
+              />
+
+              <input
+                type="date"
+                value={searchDepartureDate}
+                onChange={(e) => setSearchDepartureDate(e.target.value)}
+                disabled={loading}
+                min={new Date().toISOString().split('T')[0]}
+                className="h-8 px-3 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 shrink-0"
+              />
+
+              <button
+                type="button"
+                onClick={async () => {
+                  if (searchOrigin && searchDestination && searchDepartureDate) {
+                    await handleSearch(searchOrigin, searchDestination, searchDepartureDate);
+                  }
+                }}
+                disabled={loading || !searchOrigin || !searchDestination || !searchDepartureDate}
+                className="h-8 px-4 py-1 text-xs font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 whitespace-nowrap shrink-0"
+              >
+                {loading ? 'Searching...' : 'Search'}
+              </button>
             </div>
           </div>
         )}
