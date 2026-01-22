@@ -1,0 +1,16 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "vite",
+  "outputDirectory": "dist",
+  "env": {
+    "VITE_AMADEUS_API_KEY": "@vite_amadeus_api_key",
+    "VITE_AMADEUS_API_SECRET": "@vite_amadeus_api_secret"
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  }
+}
