@@ -10,9 +10,28 @@ import {
 
 interface PriceChartProps {
   data: Array<{ price: number; count: number }>;
+  loading?: boolean;
 }
 
-export const PriceChart = ({ data }: PriceChartProps) => {
+export const PriceChart = ({ data, loading }: PriceChartProps) => {
+  // Show skeleton loader while loading (same as FlightResults)
+  if (loading) {
+    return (
+      <div aria-live="polite" aria-busy="true">
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-blue-700 text-sm flex items-center gap-2">
+            <span className="animate-spin">⟳</span>
+            <span>Searching for flights...</span>
+          </p>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6 h-96">
+          <div className="h-8 bg-gray-200 rounded w-48 mb-6 animate-pulse"></div>
+          <div className="h-64 bg-gray-100 rounded animate-pulse"></div>
+        </div>
+      </div>
+    );
+  }
+
   if (data.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-md p-6 flex items-center justify-center h-96">

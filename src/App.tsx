@@ -229,7 +229,7 @@ function App() {
                       onSortChange={updateSortBy}
                     />
                   ) : (
-                    <PriceChart data={priceDistribution} />
+                    <PriceChart data={priceDistribution} loading={loading} />
                   )}
                 </div>
               </div>
