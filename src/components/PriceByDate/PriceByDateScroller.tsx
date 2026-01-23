@@ -16,7 +16,9 @@ export const PriceByDateScroller = ({
 }: PriceByDateScrollerProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
-  // Generate date range: ±14 days around selected date (29 dates total: 14 before + selected + 14 after)
+  // Generate date range: 
+  // - Past: from today to selected date (max 14 days back, but not before today)
+  // - Future: from selected date to 14 days after selected date
   const dateRange = useMemo(() => {
     const dates: string[] = [];
     const today = new Date();
@@ -25,14 +27,8 @@ export const PriceByDateScroller = ({
     const selected = new Date(selectedDate);
     selected.setHours(0, 0, 0, 0);
 
-    // Start 14 days before selected date, but not before today
-    const startDate = new Date(selected);
-    startDate.setDate(startDate.getDate() - 14);
-    
-    // If start date is before today, use today instead
-    if (startDate < today) {
-      startDate.setTime(today.getTime());
-    }
+    // Start from today (never go to past dates)
+    const startDate = new Date(today);
 
     // End 14 days after selected date
     const endDate = new Date(selected);
