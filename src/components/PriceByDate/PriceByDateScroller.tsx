@@ -96,9 +96,9 @@ export const PriceByDateScroller = ({
       </div>
 
       {/* Horizontal Scroller - Full width scrollable container */}
-      <div className="w-full overflow-x-auto scrollbar-hide">
+      <div className="overflow-x-auto scrollbar-hide">
         <section
-          className="flex gap-2 pb-2 w-max"
+          className="inline-flex gap-2 pb-2 min-w-full"
           aria-label="Prices for nearby dates"
         >
           {dateRange.map((date) => renderDateCard(date))}
