@@ -15,7 +15,8 @@ export const PriceByDateScroller = ({
   onFetchDate,
 }: PriceByDateScrollerProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  // Generate future dates only (today to 14 days after selected date)
+  
+  // Generate date range: ±14 days around selected date (29 dates total: 14 before + selected + 14 after)
   const dateRange = useMemo(() => {
     const dates: string[] = [];
     const today = new Date();
@@ -24,10 +25,16 @@ export const PriceByDateScroller = ({
     const selected = new Date(selectedDate);
     selected.setHours(0, 0, 0, 0);
 
-    // Start from today or selected date, whichever is later
-    const startDate = new Date(Math.max(today.getTime(), selected.getTime()));
+    // Start 14 days before selected date, but not before today
+    const startDate = new Date(selected);
+    startDate.setDate(startDate.getDate() - 14);
+    
+    // If start date is before today, use today instead
+    if (startDate < today) {
+      startDate.setTime(today.getTime());
+    }
 
-    // Generate from start date to 14 days after selected date
+    // End 14 days after selected date
     const endDate = new Date(selected);
     endDate.setDate(endDate.getDate() + 14);
 
@@ -104,7 +111,7 @@ export const PriceByDateScroller = ({
             if (scrollContainerRef.current) {
               scrollContainerRef.current.scrollBy({
                 left: -300,
-                behavior: 'smooth',
+                behavior: 'auto',
               });
             }
           }}
@@ -124,10 +131,11 @@ export const PriceByDateScroller = ({
         {/* Scrollable container */}
         <div
           ref={scrollContainerRef}
-          className="flex-1 overflow-x-auto scrollbar-hide"
+          className="flex-1 overflow-x-auto overflow-y-hidden scrollbar-hide"
+          style={{ scrollBehavior: 'auto' }}
         >
           <section
-            className="inline-flex gap-2 pb-2"
+            className="inline-flex gap-2 pb-2 will-change-transform"
             aria-label="Prices for nearby dates"
           >
             {dateRange.map((date) => renderDateCard(date))}
@@ -140,7 +148,7 @@ export const PriceByDateScroller = ({
             if (scrollContainerRef.current) {
               scrollContainerRef.current.scrollBy({
                 left: 300,
-                behavior: 'smooth',
+                behavior: 'auto',
               });
             }
           }}
