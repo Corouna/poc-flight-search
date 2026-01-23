@@ -112,22 +112,31 @@ export const FlightResults = ({
           <div className="flex items-center gap-2">
             <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Sort by:</p>
             <div className="flex gap-2">
-              {(['price', 'duration', 'departure'] as const).map((option) => (
-                <button
-                  key={option}
-                  onClick={() => onSortChange(option)}
-                  className={`px-3 py-1.5 rounded-lg font-semibold text-xs transition-all duration-200 ${
-                    sortBy === option
-                      ? 'bg-blue-600 text-white shadow-sm'
-                      : 'bg-gray-100 text-gray-700 hover:border-blue-400 hover:text-blue-600'
-                  }`}
-                  aria-pressed={sortBy === option}
-                >
-                  {option === 'price' && '💰'}
-                  {option === 'duration' && '⏱️'}
-                  {option === 'departure' && '🕒'}
-                </button>
-              ))}
+              {(['price', 'duration', 'departure'] as const).map((option) => {
+                const tooltips = {
+                  price: 'Sort by Price (Lowest to Highest)',
+                  duration: 'Sort by Flight Duration (Shortest to Longest)',
+                  departure: 'Sort by Departure Time (Earliest to Latest)',
+                };
+
+                return (
+                  <button
+                    key={option}
+                    onClick={() => onSortChange(option)}
+                    title={tooltips[option]}
+                    className={`px-3 py-1.5 rounded-lg font-semibold text-xs transition-all duration-200 ${
+                      sortBy === option
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'bg-gray-100 text-gray-700 hover:border-blue-400 hover:text-blue-600'
+                    }`}
+                    aria-pressed={sortBy === option}
+                  >
+                    {option === 'price' && '💰'}
+                    {option === 'duration' && '⏱️'}
+                    {option === 'departure' && '🕒'}
+                  </button>
+                );
+              })}
             </div>
           </div>
 

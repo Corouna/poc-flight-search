@@ -97,7 +97,7 @@ export const PriceByDateScroller = ({
         key={date}
         data-date={date}
         onClick={() => onDateSelect(date)}
-        disabled={cached?.loading}
+        disabled={cached?.loading || isSelected}
         className={`shrink-0 p-3 rounded-lg border transition-all cursor-pointer disabled:cursor-not-allowed
           ${
             isSelected
