@@ -14,26 +14,26 @@ export const PriceByDateScroller = ({
   priceCache,
   onFetchDate,
 }: PriceByDateScrollerProps) => {
-  // Generate ±14 day date range
+  // Generate future dates only (today to 14 days after selected date)
   const dateRange = useMemo(() => {
     const dates: string[] = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
     const selected = new Date(selectedDate);
+    selected.setHours(0, 0, 0, 0);
 
-    // 14 days before
-    for (let i = 14; i > 0; i--) {
-      const date = new Date(selected);
-      date.setDate(date.getDate() - i);
-      dates.push(date.toISOString().split('T')[0]);
-    }
+    // Start from today or selected date, whichever is later
+    const startDate = new Date(Math.max(today.getTime(), selected.getTime()));
 
-    // Selected date
-    dates.push(selectedDate);
+    // Generate from start date to 14 days after selected date
+    const endDate = new Date(selected);
+    endDate.setDate(endDate.getDate() + 14);
 
-    // 14 days after
-    for (let i = 1; i <= 14; i++) {
-      const date = new Date(selected);
-      date.setDate(date.getDate() + i);
-      dates.push(date.toISOString().split('T')[0]);
+    let current = new Date(startDate);
+    while (current <= endDate) {
+      dates.push(current.toISOString().split('T')[0]);
+      current.setDate(current.getDate() + 1);
     }
 
     return dates;
@@ -89,19 +89,21 @@ export const PriceByDateScroller = ({
   };
 
   return (
-    <div className="mb-6 -mx-4 px-4">
+    <div className="mb-6">
       <div className="flex items-center gap-3 mb-3">
         <p className="text-xs font-semibold text-gray-700 uppercase tracking-wider">Prices by date</p>
-        <span className="text-xs text-gray-500">±14 days • Cheapest available</span>
+        <span className="text-xs text-gray-500">Future dates only • Cheapest available</span>
       </div>
 
-      {/* Horizontal Scroller */}
-      <section
-        className="flex gap-2 overflow-x-auto pb-2 -mb-2 scrollbar-hide"
-        aria-label="Prices for nearby dates"
-      >
-        {dateRange.map((date) => renderDateCard(date))}
-      </section>
+      {/* Horizontal Scroller - Full width scrollable container */}
+      <div className="w-full overflow-x-auto scrollbar-hide">
+        <section
+          className="flex gap-2 pb-2 w-max"
+          aria-label="Prices for nearby dates"
+        >
+          {dateRange.map((date) => renderDateCard(date))}
+        </section>
+      </div>
     </div>
   );
 };
