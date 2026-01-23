@@ -66,17 +66,19 @@ export const searchFlights = async (
         destinationLocationCode: destination.toUpperCase(),
         departureDate,
         adults: '1',
-        currencyCode: 'USD',
       },
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      timeout: 10000,
     });
 
     return response.data.data || [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorDetail = error.response?.data?.errors?.[0]?.detail || error.message;
+      const errorDetail = error.response?.data?.errors?.[0]?.detail || 
+                         error.response?.data?.errors?.[0]?.title ||
+                         error.message;
       throw new Error(`Flight search failed: ${errorDetail}`);
     }
     throw error;
