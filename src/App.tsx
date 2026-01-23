@@ -26,7 +26,6 @@ function App() {
   const { saveToUrl } = useUrlState();
 
   const [activeTab, setActiveTab] = useState<'list' | 'graph'>('list');
-  const [selectedDate, setSelectedDate] = useState('');
   const [searchOrigin, setSearchOrigin] = useState('');
   const [searchDestination, setSearchDestination] = useState('');
   const [searchDepartureDate, setSearchDepartureDate] = useState('');
@@ -168,7 +167,6 @@ function App() {
           <SearchForm 
             onSearch={handleSearch} 
             loading={loading}
-            onUrlStateLoaded={(_origin, _destination, departureDate) => setSelectedDate(departureDate)}
           />
         )}
 
@@ -197,7 +195,6 @@ function App() {
                 error={error}
                 sortBy={sortBy}
                 onSortChange={updateSortBy}
-                selectedDate={selectedDate}
               />
             ) : (
               <PriceChart data={priceDistribution} />

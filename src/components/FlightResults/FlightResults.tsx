@@ -1,5 +1,4 @@
 import { FlightCard } from './FlightCard';
-import { PriceByDateScroller } from '../PriceByDate/PriceByDateScroller';
 import type { FlightOffer } from '../../types/flight';
 
 interface FlightResultsProps {
@@ -8,7 +7,6 @@ interface FlightResultsProps {
   error: string | null;
   sortBy: 'price' | 'duration' | 'departure';
   onSortChange: (sort: 'price' | 'duration' | 'departure') => void;
-  selectedDate?: string;
 }
 
 // Professional Skeleton Card Component - matches FlightCard layout exactly
@@ -60,7 +58,6 @@ export const FlightResults = ({
   error,
   sortBy,
   onSortChange,
-  selectedDate = '',
 }: FlightResultsProps) => {
   if (loading) {
     return (
@@ -108,11 +105,6 @@ export const FlightResults = ({
 
   return (
     <section aria-label="Flight search results" className="flex flex-col">
-      {/* Price by Date Scroller */}
-      {selectedDate && (
-        <PriceByDateScroller flights={flights} selectedDate={selectedDate} />
-      )}
-
       {/* Sticky Control Bar */}
       <div className="sticky top-24 z-20 bg-white border-b border-gray-200 p-2 mb-4 shadow-sm">
         <div className="flex items-center justify-between gap-4 flex-wrap">
