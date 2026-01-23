@@ -35,8 +35,6 @@ export const PriceByDateScroller = ({
     const selected = new Date(selectedDate + 'T00:00:00');
     selected.setHours(0, 0, 0, 0);
 
-    console.log('PriceByDateScroller - Today:', todayString, 'Selected:', selectedDate);
-
     // Start from today (never go to past dates)
     const startDate = new Date(today);
 
@@ -49,8 +47,6 @@ export const PriceByDateScroller = ({
       dates.push(current.toISOString().split('T')[0]);
       current.setDate(current.getDate() + 1);
     }
-
-    console.log('Generated dates range:', dates.length, 'dates from', dates[0], 'to', dates.at(-1));
 
     return dates;
   }, [selectedDate]);
@@ -65,6 +61,30 @@ export const PriceByDateScroller = ({
     });
   }, [dateRange, priceCache, onFetchDate]);
 
+  // Scroll to center the selected date card
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const selectedButton = scrollContainerRef.current.querySelector(
+        `button[data-date="${selectedDate}"]`
+      ) as HTMLButtonElement;
+      
+      if (selectedButton) {
+        // Calculate offset to center the selected date
+        const containerWidth = scrollContainerRef.current.clientWidth;
+        const buttonWidth = selectedButton.offsetWidth;
+        const buttonLeft = selectedButton.offsetLeft;
+        
+        // Scroll to position the button in the middle
+        const scrollPosition = buttonLeft - (containerWidth - buttonWidth) / 2;
+        
+        scrollContainerRef.current.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, [selectedDate]);
+
   const renderDateCard = (date: string) => {
     const isSelected = date === selectedDate;
     const cached = priceCache.get(date);
@@ -75,6 +95,7 @@ export const PriceByDateScroller = ({
     return (
       <button
         key={date}
+        data-date={date}
         onClick={() => onDateSelect(date)}
         disabled={cached?.loading}
         className={`shrink-0 p-3 rounded-lg border transition-all cursor-pointer disabled:cursor-not-allowed
