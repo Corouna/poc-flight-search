@@ -23,7 +23,7 @@ function App() {
     updateSortBy,
     resetFilters,
   } = useFlightFilters(flights);
-  const { saveToUrl } = useUrlState();
+  const { saveToUrl, clearUrl } = useUrlState();
 
   const [activeTab, setActiveTab] = useState<'list' | 'graph'>('list');
   const [searchOrigin, setSearchOrigin] = useState('');
@@ -41,8 +41,11 @@ function App() {
         filters,
         sortBy,
       });
+    } else {
+      // Clear URL when no flights (showing search form)
+      clearUrl();
     }
-  }, [filters, sortBy, flights.length, saveToUrl]);
+  }, [filters, sortBy, flights.length, saveToUrl, clearUrl]);
 
   // Handle search submission
   const handleSearch = async (origin: string, destination: string, departureDate: string) => {
@@ -68,7 +71,7 @@ function App() {
           <div className="bg-white border-t border-gray-200 shadow-sm">
             <div className="max-w-7xl mx-auto px-4">
               {/* Minified Search Row with Tab Buttons */}
-              <div className="flex gap-3 py-3 border-t border-gray-200 bg-gray-50 -mx-4 px-4 items-center justify-between">
+              <div className="flex gap-3 py-3 border-t border-gray-200 bg-white -mx-4 px-4 items-center justify-between">
                 {/* Search Controls - Left side */}
                 <div className="flex gap-3 items-center flex-1">
                   <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Modify search:</span>
@@ -162,8 +165,8 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search Form - Show only when no results */}
-        {flights.length === 0 && (
+        {/* Search Form - Show only when no results and not loading */}
+        {flights.length === 0 && !loading && (
           <SearchForm 
             onSearch={handleSearch} 
             loading={loading}
