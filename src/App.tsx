@@ -182,7 +182,7 @@ function App() {
         <>
           {/* Price by Date Scroller - Fixed, non-scrolling */}
           {flights.length > 0 && (
-            <div className="bg-white border-b border-gray-200 px-4 py-4 shrink-0">
+            <div className="bg-white border-b border-gray-200 px-4 py-2 shrink-0">
               <div className="max-w-7xl mx-auto">
                 <PriceByDateScroller
                   selectedDate={searchDepartureDate}
