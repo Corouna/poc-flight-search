@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useRef } from 'react';
 import type { CachedDatePrice } from '../../hooks/useDatePriceCache';
 
 interface PriceByDateScrollerProps {
@@ -14,6 +14,7 @@ export const PriceByDateScroller = ({
   priceCache,
   onFetchDate,
 }: PriceByDateScrollerProps) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   // Generate future dates only (today to 14 days after selected date)
   const dateRange = useMemo(() => {
     const dates: string[] = [];
@@ -95,14 +96,66 @@ export const PriceByDateScroller = ({
         <span className="text-xs text-gray-500">Future dates only • Cheapest available</span>
       </div>
 
-      {/* Horizontal Scroller - Full width scrollable container */}
-      <div className="overflow-x-auto scrollbar-hide">
-        <section
-          className="inline-flex gap-2 pb-2 min-w-full"
-          aria-label="Prices for nearby dates"
+      {/* Container with navigation buttons */}
+      <div className="flex items-center gap-2">
+        {/* Left Button */}
+        <button
+          onClick={() => {
+            if (scrollContainerRef.current) {
+              scrollContainerRef.current.scrollBy({
+                left: -300,
+                behavior: 'smooth',
+              });
+            }
+          }}
+          className="shrink-0 p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all"
+          aria-label="Scroll left"
         >
-          {dateRange.map((date) => renderDateCard(date))}
-        </section>
+          <svg
+            className="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        {/* Scrollable container */}
+        <div
+          ref={scrollContainerRef}
+          className="flex-1 overflow-x-auto scrollbar-hide"
+        >
+          <section
+            className="inline-flex gap-2 pb-2"
+            aria-label="Prices for nearby dates"
+          >
+            {dateRange.map((date) => renderDateCard(date))}
+          </section>
+        </div>
+
+        {/* Right Button */}
+        <button
+          onClick={() => {
+            if (scrollContainerRef.current) {
+              scrollContainerRef.current.scrollBy({
+                left: 300,
+                behavior: 'smooth',
+              });
+            }
+          }}
+          className="shrink-0 p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all"
+          aria-label="Scroll right"
+        >
+          <svg
+            className="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
     </div>
   );
