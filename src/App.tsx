@@ -4,9 +4,11 @@ import { SearchForm } from './components/SearchForm/SearchForm';
 import { FlightResults } from './components/FlightResults/FlightResults';
 import { FilterPanel } from './components/Filters/FilterPanel';
 import { PriceChart } from './components/PriceGraph/PriceChart';
+import { PriceByDateScroller } from './components/PriceByDate/PriceByDateScroller';
 import { useFlightSearch } from './hooks/useFlightSearch';
 import { useFlightFilters } from './hooks/useFlightFilters';
 import { useUrlState } from './hooks/useUrlState';
+import { useDatePriceCache } from './hooks/useDatePriceCache';
 import { getPriceDistribution } from './utils/filterHelpers';
 
 function App() {
@@ -24,6 +26,7 @@ function App() {
     resetFilters,
   } = useFlightFilters(flights);
   const { saveToUrl, clearUrl } = useUrlState();
+  const { cache: priceCache, fetchPriceForDate } = useDatePriceCache();
 
   const [activeTab, setActiveTab] = useState<'list' | 'graph'>('list');
   const [searchOrigin, setSearchOrigin] = useState('');
@@ -170,6 +173,21 @@ function App() {
           <SearchForm 
             onSearch={handleSearch} 
             loading={loading}
+          />
+        )}
+
+        {/* Price by Date Scroller - Show when flights are available */}
+        {flights.length > 0 && (
+          <PriceByDateScroller
+            selectedDate={searchDepartureDate}
+            onDateSelect={async (date) => {
+              setSearchDepartureDate(date);
+              await search(searchOrigin, searchDestination, date);
+            }}
+            priceCache={priceCache}
+            onFetchDate={async (date) => {
+              await fetchPriceForDate(searchOrigin, searchDestination, date);
+            }}
           />
         )}
 
