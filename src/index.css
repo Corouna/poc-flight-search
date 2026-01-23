@@ -15,6 +15,7 @@ body {
   background-color: #f9fafb;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 /* Hide scrollbar while keeping scrollability */

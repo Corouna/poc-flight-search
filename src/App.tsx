@@ -59,9 +59,9 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
+    <div className="h-screen w-screen overflow-hidden bg-linear-to-br from-blue-50 to-indigo-100 flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+      <header className="bg-white border-b border-gray-200 z-40 shrink-0">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <h1 className="text-3xl font-bold text-gray-950 tracking-tight">
             ✈️ Flight Search Engine
@@ -166,63 +166,77 @@ function App() {
         )}
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search Form - Show only when no results and not loading */}
-        {flights.length === 0 && !loading && (
-          <SearchForm 
-            onSearch={handleSearch} 
-            loading={loading}
-          />
-        )}
-
-        {/* Price by Date Scroller - Show when flights are available */}
-        {flights.length > 0 && (
-          <PriceByDateScroller
-            selectedDate={searchDepartureDate}
-            onDateSelect={async (date) => {
-              setSearchDepartureDate(date);
-              await search(searchOrigin, searchDestination, date);
-            }}
-            priceCache={priceCache}
-            onFetchDate={async (date) => {
-              await fetchPriceForDate(searchOrigin, searchDestination, date);
-            }}
-          />
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Filters Sidebar */}
+      {/* Main Content Container */}
+      {flights.length === 0 && !loading ? (
+        // Search form view - full page scrollable
+        <main className="flex-1 overflow-y-auto">
+          <div className="max-w-7xl mx-auto px-4 py-8">
+            <SearchForm 
+              onSearch={handleSearch} 
+              loading={loading}
+            />
+          </div>
+        </main>
+      ) : (
+        // Results view - fixed price scroller + independent scrollable areas
+        <>
+          {/* Price by Date Scroller - Fixed, non-scrolling */}
           {flights.length > 0 && (
-            <div className="lg:col-span-1">
-              <FilterPanel
-                filters={filters}
-                priceRange={priceRange}
-                airlines={availableAirlines}
-                onAirlineChange={updateAirlineFilter}
-                onStopsChange={updateStopsFilter}
-                onPriceChange={updatePriceFilter}
-                onReset={resetFilters}
-              />
+            <div className="bg-white border-b border-gray-200 px-4 py-4 shrink-0">
+              <div className="max-w-7xl mx-auto">
+                <PriceByDateScroller
+                  selectedDate={searchDepartureDate}
+                  onDateSelect={async (date) => {
+                    setSearchDepartureDate(date);
+                    await search(searchOrigin, searchDestination, date);
+                  }}
+                  priceCache={priceCache}
+                  onFetchDate={async (date) => {
+                    await fetchPriceForDate(searchOrigin, searchDestination, date);
+                  }}
+                />
+              </div>
             </div>
           )}
 
-          {/* Main Content */}
-          <div className={flights.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'}>
-            {activeTab === 'list' ? (
-              <FlightResults
-                flights={filteredFlights}
-                loading={loading}
-                error={error}
-                sortBy={sortBy}
-                onSortChange={updateSortBy}
-              />
-            ) : (
-              <PriceChart data={priceDistribution} />
-            )}
-          </div>
-        </div>
-      </main>
+          {/* Results Area - Independent scrollable sections */}
+          <main className="flex-1 overflow-hidden">
+            <div className="max-w-7xl mx-auto px-4 py-8 h-full flex flex-col">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 overflow-hidden">
+                {/* Filters Sidebar - Left scrollable */}
+                {flights.length > 0 && (
+                  <div className="lg:col-span-1 overflow-y-auto scrollbar-hide">
+                    <FilterPanel
+                      filters={filters}
+                      priceRange={priceRange}
+                      airlines={availableAirlines}
+                      onAirlineChange={updateAirlineFilter}
+                      onStopsChange={updateStopsFilter}
+                      onPriceChange={updatePriceFilter}
+                      onReset={resetFilters}
+                    />
+                  </div>
+                )}
+
+                {/* Flight Results - Right scrollable */}
+                <div className={`${flights.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'} overflow-y-auto scrollbar-hide`}>
+                  {activeTab === 'list' ? (
+                    <FlightResults
+                      flights={filteredFlights}
+                      loading={loading}
+                      error={error}
+                      sortBy={sortBy}
+                      onSortChange={updateSortBy}
+                    />
+                  ) : (
+                    <PriceChart data={priceDistribution} />
+                  )}
+                </div>
+              </div>
+            </div>
+          </main>
+        </>
+      )}
     </div>
   );
 }
