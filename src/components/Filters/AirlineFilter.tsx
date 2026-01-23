@@ -10,7 +10,7 @@ export const AirlineFilter = ({
   onChange,
 }: AirlineFilterProps) => {
   return (
-    <div className="space-y-2 max-h-64 overflow-y-auto">
+    <div className="space-y-1.5 max-h-64 overflow-y-auto">
       {airlines.length === 0 ? (
         <p className="text-sm text-gray-500 italic">No airlines available</p>
       ) : (

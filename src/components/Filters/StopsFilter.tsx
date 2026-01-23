@@ -11,7 +11,7 @@ const STOP_OPTIONS = [
 
 export const StopsFilter = ({ selectedStops, onChange }: StopsFilterProps) => {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {STOP_OPTIONS.map((option) => {
         const isChecked = selectedStops.includes(option.value);
         return (
