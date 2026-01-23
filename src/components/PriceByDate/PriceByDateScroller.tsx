@@ -16,16 +16,26 @@ export const PriceByDateScroller = ({
 }: PriceByDateScrollerProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
+  // Get today's date in YYYY-MM-DD format (timezone-safe)
+  const getTodayString = () => {
+    const today = new Date();
+    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  };
+  
   // Generate date range: 
   // - Past: from today to selected date (max 14 days back, but not before today)
   // - Future: from selected date to 14 days after selected date
   const dateRange = useMemo(() => {
     const dates: string[] = [];
-    const today = new Date();
+    const todayString = getTodayString();
+    
+    const today = new Date(todayString + 'T00:00:00');
     today.setHours(0, 0, 0, 0);
     
-    const selected = new Date(selectedDate);
+    const selected = new Date(selectedDate + 'T00:00:00');
     selected.setHours(0, 0, 0, 0);
+
+    console.log('PriceByDateScroller - Today:', todayString, 'Selected:', selectedDate);
 
     // Start from today (never go to past dates)
     const startDate = new Date(today);
@@ -39,6 +49,8 @@ export const PriceByDateScroller = ({
       dates.push(current.toISOString().split('T')[0]);
       current.setDate(current.getDate() + 1);
     }
+
+    console.log('Generated dates range:', dates.length, 'dates from', dates[0], 'to', dates.at(-1));
 
     return dates;
   }, [selectedDate]);
